@@ -1,0 +1,8 @@
+# Ignore local dependencies and lock file when bundle is developed inside a host app
+/vendor/
+/composer.lock
+/.phpunit.result.cache
+/.php-cs-fixer.cache
+/.idea/
+/.vscode/
+.idea

@@ -1,0 +1,12 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Francoisvaillant\TwigTrace\:
+    resource: '../src/*'
+    exclude: '../src/{DependencyInjection,Entity,Tests,Kernel.php}'
+
+
+  Francoisvaillant\TwigTrace\Twig\Extension\HtmlCommentExtension:
+    tags: [ 'twig.extension' ]
