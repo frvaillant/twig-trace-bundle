@@ -1,5 +1,9 @@
 <?php
 
+/**
+ *  This class makes HtmlCommentNodeVisitor available to twig templates
+ */
+
 namespace Francoisvaillant\TwigTrace\Twig\Extension;
 
 use Francoisvaillant\TwigTrace\Twig\Listener\HtmlCommentNodeVisitor;

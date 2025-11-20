@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * This class insert HTML comments in twig templates to help debug
+ */
+
 namespace Francoisvaillant\TwigTrace\Twig\Listener;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

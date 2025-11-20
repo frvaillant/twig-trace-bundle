@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Bundle extension
+ */
+
 namespace Francoisvaillant\TwigTrace\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
@@ -10,6 +14,12 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class TwigTraceExtension extends Extension
 {
 
+    /**
+     * @param array $configs
+     * @param ContainerBuilder $container
+     * @return void
+     * @throws \Exception
+     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
@@ -28,6 +38,9 @@ class TwigTraceExtension extends Extension
         $loader->load('services.yaml');
     }
 
+    /**
+     * @return string
+     */
     public function getAlias(): string
     {
         return 'twig_trace';

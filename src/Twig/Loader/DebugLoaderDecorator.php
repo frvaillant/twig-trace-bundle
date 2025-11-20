@@ -1,9 +1,12 @@
 <?php
 
+/**
+ * This class decorates Twig's loader to add HTML comments to twig templates for blocks and macros
+ * For example, the comments are formatted like this : '<!-- BLOCK : templateName::blockName -->
+ */
+
 namespace Francoisvaillant\TwigTrace\Twig\Loader;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
 
@@ -18,9 +21,17 @@ class DebugLoaderDecorator implements LoaderInterface
         private readonly string $separatorEnd,
         private readonly array $excludedBlocks,
         private readonly array $excludedPaths,
-    ) {
+    )
+    {
     }
 
+    /**
+     * @param string $name
+     *
+     * @return Source
+     *
+     * @throws \Twig\Error\LoaderError
+     */
     public function getSourceContext(string $name): Source
     {
         $source = $this->loader->getSourceContext($name);
@@ -39,21 +50,46 @@ class DebugLoaderDecorator implements LoaderInterface
         return new Source($code, $source->getName(), $source->getPath());
     }
 
+    /**
+     * @param string $name
+     *
+     * @return string
+     *
+     * @throws \Twig\Error\LoaderError
+     */
     public function getCacheKey(string $name): string
     {
         return $this->loader->getCacheKey($name);
     }
 
+    /**
+     * @param string $name
+     * @param int $time
+     *
+     * @return bool
+     *
+     * @throws \Twig\Error\LoaderError
+     */
     public function isFresh(string $name, int $time): bool
     {
         return $this->loader->isFresh($name, $time);
     }
 
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
     public function exists(string $name): bool
     {
         return $this->loader->exists($name);
     }
 
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
     private function shouldExclude(string $name): bool
     {
         foreach ([...self::EXCLUDED_TEMPLATES, ...$this->excludedPaths] as $excluded) {
@@ -65,6 +101,12 @@ class DebugLoaderDecorator implements LoaderInterface
         return false;
     }
 
+    /**
+     * @param string $code
+     * @param string $templateName
+     *
+     * @return string
+     */
     private function wrapMacros(string $code, string $templateName): string
     {
 
@@ -94,6 +136,12 @@ class DebugLoaderDecorator implements LoaderInterface
         }, $code);
     }
 
+    /**
+     * @param string $code
+     * @param string $templateName
+     *
+     * @return string
+     */
     private function wrapBlocks(string $code, string $templateName): string
     {
         $pattern = '/{%\s*block\s+(\w+)\s*%}(.*?){%\s*endblock\s*%}/s';
