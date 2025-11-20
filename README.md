@@ -66,13 +66,21 @@ Once installed, the bundle automatically adds HTML comments to your rendered HTM
 
 ## Configuration
 
-Create a configuration file `config/packages/twig_trace.yaml`:
+If you want to customize default configuration, create a configuration file `config/packages/twig_trace.yaml`:
 
 ```yaml
 twig_trace:
     # Custom separators for better visibility
-    separator_start: '/////////////////'
-    separator_end: '/////////////////'
+    separator_template_start: '/////////////////'
+    separator_template_end: '/////////////////'
+
+  # Custom separators for better visibility
+    separator_macro_start: '-------------'
+    separator_macro_end: '-------------'
+
+  # Custom separators for better visibility
+    separator_block_start: '{{{{{{'
+    separator_block_end: '}}}}}}'
     
     # Blocks to exclude from wrapping (useful for <title>, <meta>, etc.)
     excluded_blocks:
@@ -90,12 +98,16 @@ twig_trace:
 
 ### Configuration Reference
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `separator_start` | `string` | `''` | Separator displayed at the start of comments |
-| `separator_end` | `string` | `''` | Separator displayed at the end of comments |
-| `excluded_blocks` | `array` | `['title', 'meta', 'stylesheets', 'javascripts']` | Block names to exclude from wrapping |
-| `excluded_paths` | `array` | `[]` | Template paths to exclude (supports partial matches) |
+| Option                     | Type | Default | Description                                                |
+|----------------------------|------|---------|------------------------------------------------------------|
+| `separator_template_start` | `string` | `''` | Separator displayed at the start of comments for templates |
+| `separator_template_end`   | `string` | `''` | Separator displayed at the end of comments for templates   |
+| `separator_macro_start`    | `string` | `''` | Separator displayed at the start of comments for macros    |
+| `separator_macro_end`      | `string` | `''` | Separator displayed at the end of comments for macros      |
+| `separator_block_start`    | `string` | `''` | Separator displayed at the start of comments for blocks    |
+| `separator_block_end`      | `string` | `''` | Separator displayed at the end of comments for blocks      |
+| `excluded_blocks`          | `array` | `['title', 'meta', 'stylesheets', 'javascripts']` | Block names to exclude from wrapping                       |
+| `excluded_paths`           | `array` | `[]` | Template paths to exclude (supports partial matches)       |
 
 **Note:** `@WebProfiler` templates are always excluded automatically.
 
