@@ -187,7 +187,7 @@ This bundle is released under the MIT License. See the [LICENSE](LICENSE) file f
 
 ## Credits
 
-Created by [François Vaillant](https://github.com/francoisvaillant)
+Created by [François Vaillant](https://github.com/frvaillant)
 
 ## Support
 
