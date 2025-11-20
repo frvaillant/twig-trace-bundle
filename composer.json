@@ -1,5 +1,6 @@
 {
     "name": "francoisvaillant/twig-trace-bundle",
+  "description": "A Symfony bundle that automatically adds HTML comments to your rendered templates in development mode, making it easy to identify which Twig files, macros, and blocks are being used.\n",
     "type": "symfony-bundle",
     "license": "MIT",
     "autoload": {
@@ -30,5 +31,10 @@
       "symfony/phpunit-bridge": "^7.3",
       "phpstan/phpstan-symfony": "^2.0",
       "friendsofphp/php-cs-fixer": "^3.89"
+    },
+    "extra": {
+      "symfony": {
+        "bundle": ["Francoisvaillant\\TwigTrace\\TwigTraceBundle"]
+      }
     }
 }
