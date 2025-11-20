@@ -84,7 +84,7 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
     private function createStartComment(string $templateName, int $line): TextNode
     {
         return $this->createComment(
-            $this->buildMessage($templateName),
+            $this->buildMessage($templateName, 'TEMPLATE : '),
             $line
         );
     }
@@ -97,7 +97,7 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
     private function createEndComment(string $templateName, int $line): TextNode
     {
         return $this->createComment(
-            $this->buildMessage($templateName, 'end template '),
+            $this->buildMessage($templateName, 'END TEMPLATE : '),
             $line
         );
     }

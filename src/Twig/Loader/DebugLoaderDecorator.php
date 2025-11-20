@@ -78,7 +78,7 @@ class DebugLoaderDecorator implements LoaderInterface
             $macroContent = $matches[3];
 
             return sprintf(
-                "{%% macro %s(%s) %%}\n\n<!-- %s MACRO: %s::%s %s -->\n%s\n<!-- %s END MACRO: %s::%s %s -->\n{%% endmacro %%}",
+                "{%% macro %s(%s) %%}\n\n<!-- %s MACRO : %s::%s %s -->\n%s\n<!-- %s END MACRO : %s::%s %s -->\n{%% endmacro %%}",
                 $macroName,
                 $macroParams,
                 $this->separatorStart,
@@ -108,7 +108,7 @@ class DebugLoaderDecorator implements LoaderInterface
             }
 
             return sprintf(
-                "{%% block %s %%}\n\n<!-- %s BLOCK: %s::%s %s -->\n%s\n<!-- %s END BLOCK: %s::%s %s -->\n{%% endblock %%}",
+                "{%% block %s %%}\n\n<!-- %s BLOCK : %s::%s %s -->\n%s\n<!-- %s END BLOCK : %s::%s %s -->\n{%% endblock %%}",
                 $blockName,
                 $this->separatorStart,
                 $templateName,
