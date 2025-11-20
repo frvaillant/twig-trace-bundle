@@ -23,18 +23,22 @@ class TwigTraceExtension extends Extension
         $configuration = new Configuration();
         $config        = $this->processConfiguration($configuration, $configs);
 
-        /* @var array{
-         *     separator_start: string,
-         *     separator_end: string,
-         *     excluded_blocks: array<string>,
-         *     excluded_paths: array<string>
-         * } $config
-         */
+        /** @var string $separatorStart */
+        $separatorStart = $config['separator_start'];
 
-        $container->setParameter('separator_start', $config['separator_start']);
-        $container->setParameter('separator_end', $config['separator_end']);
-        $container->setParameter('excluded_blocks', $config['excluded_blocks']);
-        $container->setParameter('excluded_paths', $config['excluded_paths']);
+        /** @var string $separatorEnd */
+        $separatorEnd = $config['separator_end'];
+
+        /** @var array<string> $excludedBlocks */
+        $excludedBlocks = $config['excluded_blocks'];
+
+        /** @var array<string> $excludedPaths */
+        $excludedPaths = $config['excluded_paths'];
+
+        $container->setParameter('separator_start', $separatorStart);
+        $container->setParameter('separator_end', $separatorEnd);
+        $container->setParameter('excluded_blocks', $excludedBlocks);
+        $container->setParameter('excluded_paths', $excludedPaths);
 
         $loader = new YamlFileLoader(
             $container,
