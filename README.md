@@ -6,6 +6,9 @@ A Symfony bundle that automatically adds HTML comments to your rendered template
 
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%20max-brightgreen)](https://github.com/frvaillant/twig-trace-bundle/actions/workflows/code-quality.yml?query=branch:master)
 [![PHP CS Fixer](https://img.shields.io/badge/PHP_CS_Fixer-fixed-brightgreen)](https://github.com/frvaillant/twig-trace-bundle/actions/workflows/code-quality.yml?query=branch:master)
+[![Composer Audit](https://img.shields.io/badge/Composer_Audit-passed-brightgreen)](https://github.com/frvaillant/twig-trace-bundle/actions/workflows/code-quality.yml?query=branch:master+job:composer-audit)  
+
+[View GitHub Actions](https://github.com/frvaillant/twig-trace-bundle/blob/master/.github/workflows/code-quality.yaml)
 
 
 ## Features
