@@ -154,8 +154,8 @@ The bundle is **completely disabled in production** (`kernel.debug = false`). No
 
 ```yaml
 twig_trace:
-    separator_start: '🔹'
-    separator_end: '🔹'
+    separator_template_start: '🔹'
+    separator_template_end: '🔹'
 ```
 
 Result:
