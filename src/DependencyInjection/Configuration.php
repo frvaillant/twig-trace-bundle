@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Bundle configuration
+ * Bundle configuration.
  */
 
 namespace Francoisvaillant\TwigTrace\DependencyInjection;
@@ -11,9 +11,6 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * @return TreeBuilder
-     */
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('twig_trace');
@@ -35,7 +32,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('excluded_paths')
                     ->defaultValue([])
-                    ->info('List of template paths to exclude from wrapping (supports partial matches)')                    ->scalarPrototype()->end()
+                    ->info('List of template paths to exclude from wrapping (supports partial matches)')->scalarPrototype()->end()
                 ->end()
             ->end()
         ;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This class insert HTML comments in twig templates to help debug
+ * This class insert HTML comments in twig templates to help debug.
  */
 
 namespace Francoisvaillant\TwigTrace\Twig\Listener;
@@ -15,19 +15,14 @@ use Twig\NodeVisitor\NodeVisitorInterface;
 
 class HtmlCommentNodeVisitor implements NodeVisitorInterface
 {
-    private const COMMENT_STRUCTURE = '<!-- %s -->';
+    private const COMMENT_STRUCTURE  = '<!-- %s -->';
     private const EXCLUDED_TEMPLATES = ['@WebProfiler'];
 
     public function __construct(
-        private readonly ParameterBagInterface $parameterBag
+        private readonly ParameterBagInterface $parameterBag,
     ) {
     }
 
-    /**
-     * @param Node $node
-     * @param Environment $env
-     * @return Node
-     */
     public function enterNode(Node $node, Environment $env): Node
     {
         if ($this->shouldAddComments($node, $env)) {
@@ -40,29 +35,16 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
         return $node;
     }
 
-    /**
-     * @param Node $node
-     * @param Environment $env
-     * @return Node|null
-     */
     public function leaveNode(Node $node, Environment $env): ?Node
     {
         return $node;
     }
 
-    /**
-     * @return int
-     */
     public function getPriority(): int
     {
         return 0;
     }
 
-    /**
-     * @param Node $node
-     * @param Environment $env
-     * @return bool
-     */
     private function shouldAddComments(Node $node, Environment $env): bool
     {
         if (!$node instanceof ModuleNode || !$env->isDebug()) {
@@ -80,11 +62,6 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
         return true;
     }
 
-    /**
-     * @param string $templateName
-     * @param int $line
-     * @return TextNode
-     */
     private function createStartComment(string $templateName, int $line): TextNode
     {
         return $this->createComment(
@@ -93,11 +70,6 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
         );
     }
 
-    /**
-     * @param string $templateName
-     * @param int $line
-     * @return TextNode
-     */
     private function createEndComment(string $templateName, int $line): TextNode
     {
         return $this->createComment(
@@ -106,11 +78,6 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
         );
     }
 
-    /**
-     * @param string $content
-     * @param int $line
-     * @return TextNode
-     */
     private function createComment(string $content, int $line): TextNode
     {
         return new TextNode(
@@ -119,11 +86,6 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
         );
     }
 
-    /**
-     * @param string $templateName
-     * @param string $prefix
-     * @return string
-     */
     private function buildMessage(string $templateName, string $prefix = ''): string
     {
         /** @var string $separatorStart */
@@ -141,10 +103,6 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
         return implode(' ', $parts);
     }
 
-    /**
-     * @param string $key
-     * @return string
-     */
     private function getParameter(string $key): string
     {
         $value = $this->parameterBag->get($key);

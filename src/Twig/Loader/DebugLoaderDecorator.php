@@ -2,7 +2,7 @@
 
 /**
  * This class decorates Twig's loader to add HTML comments to twig templates for blocks and macros
- * For example, the comments are formatted like this : '<!-- BLOCK : templateName::blockName -->
+ * For example, the comments are formatted like this : '<!-- BLOCK : templateName::blockName -->.
  */
 
 namespace Francoisvaillant\TwigTrace\Twig\Loader;
@@ -25,15 +25,10 @@ class DebugLoaderDecorator implements LoaderInterface
         private readonly string $separatorEnd,
         private readonly array $excludedBlocks,
         private readonly array $excludedPaths,
-    )
-    {
+    ) {
     }
 
     /**
-     * @param string $name
-     *
-     * @return Source
-     *
      * @throws \Twig\Error\LoaderError
      */
     public function getSourceContext(string $name): Source
@@ -55,10 +50,6 @@ class DebugLoaderDecorator implements LoaderInterface
     }
 
     /**
-     * @param string $name
-     *
-     * @return string
-     *
      * @throws \Twig\Error\LoaderError
      */
     public function getCacheKey(string $name): string
@@ -67,11 +58,6 @@ class DebugLoaderDecorator implements LoaderInterface
     }
 
     /**
-     * @param string $name
-     * @param int $time
-     *
-     * @return bool
-     *
      * @throws \Twig\Error\LoaderError
      */
     public function isFresh(string $name, int $time): bool
@@ -79,21 +65,11 @@ class DebugLoaderDecorator implements LoaderInterface
         return $this->loader->isFresh($name, $time);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public function exists(string $name): bool
     {
         return $this->loader->exists($name);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     private function shouldExclude(string $name): bool
     {
         foreach ([...self::EXCLUDED_TEMPLATES, ...$this->excludedPaths] as $excluded) {
@@ -105,21 +81,13 @@ class DebugLoaderDecorator implements LoaderInterface
         return false;
     }
 
-    /**
-     * @param string $code
-     * @param string $templateName
-     *
-     * @return string
-     */
     private function wrapMacros(string $code, string $templateName): string
     {
-
         $pattern = '/{%\s*macro\s+(\w+)\s*\((.*?)\)\s*%}(.*?){%\s*endmacro\s*%}/s';
 
         $result = preg_replace_callback($pattern, function ($matches) use ($templateName) {
-
-            $macroName = $matches[1];
-            $macroParams = $matches[2];
+            $macroName    = $matches[1];
+            $macroParams  = $matches[2];
             $macroContent = $matches[3];
 
             return sprintf(
@@ -141,19 +109,12 @@ class DebugLoaderDecorator implements LoaderInterface
         return $result ?? $code;
     }
 
-    /**
-     * @param string $code
-     * @param string $templateName
-     *
-     * @return string
-     */
     private function wrapBlocks(string $code, string $templateName): string
     {
         $pattern = '/{%\s*block\s+(\w+)\s*%}(.*?){%\s*endblock\s*%}/s';
 
         $result = preg_replace_callback($pattern, function ($matches) use ($templateName) {
-
-            $blockName = $matches[1];
+            $blockName    = $matches[1];
             $blockContent = $matches[2];
 
             if (in_array($blockName, $this->excludedBlocks, true)) {
@@ -177,6 +138,4 @@ class DebugLoaderDecorator implements LoaderInterface
 
         return $result ?? $code;
     }
-
-
 }

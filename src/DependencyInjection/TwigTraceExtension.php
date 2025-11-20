@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Bundle extension
+ * Bundle extension.
  */
 
 namespace Francoisvaillant\TwigTrace\DependencyInjection;
@@ -13,19 +13,17 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class TwigTraceExtension extends Extension
 {
-
     /**
      * @param array<string, mixed> $configs
-     * @param ContainerBuilder $container
-     * @return void
+     *
      * @throws \Exception
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config        = $this->processConfiguration($configuration, $configs);
 
-        /** @var array{
+        /* @var array{
          *     separator_start: string,
          *     separator_end: string,
          *     excluded_blocks: array<string>,
@@ -46,9 +44,6 @@ class TwigTraceExtension extends Extension
         $loader->load('services.yaml');
     }
 
-    /**
-     * @return string
-     */
     public function getAlias(): string
     {
         return 'twig_trace';

@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  This class makes HtmlCommentNodeVisitor available to twig templates
+ *  This class makes HtmlCommentNodeVisitor available to twig templates.
  */
 
 namespace Francoisvaillant\TwigTrace\Twig\Extension;
@@ -12,11 +12,9 @@ use Twig\Extension\AbstractExtension;
 
 class HtmlCommentExtension extends AbstractExtension
 {
-
     public function __construct(
         private ParameterBagInterface $parameterBag,
-    )
-    {
+    ) {
     }
 
     /**
