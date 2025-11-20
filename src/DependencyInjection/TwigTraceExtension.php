@@ -17,6 +17,8 @@ class TwigTraceExtension extends Extension
 
         $container->setParameter('separator_start', $config['separator_start']);
         $container->setParameter('separator_end', $config['separator_end']);
+        $container->setParameter('excluded_blocks', $config['excluded_blocks']);
+        $container->setParameter('excluded_paths', $config['excluded_paths']);
 
         $loader = new YamlFileLoader(
             $container,

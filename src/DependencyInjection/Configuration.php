@@ -21,6 +21,15 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('')
                     ->info('Separator to display at the end of template comments')
                 ->end()
+                ->arrayNode('excluded_blocks')
+                    ->defaultValue(['title', 'meta', 'stylesheets', 'javascripts'])
+                    ->info('List of block names to exclude from wrapping')
+                    ->scalarPrototype()->end()
+                ->end()
+                ->arrayNode('excluded_paths')
+                    ->defaultValue([])
+                    ->info('List of template paths to exclude from wrapping (supports partial matches)')                    ->scalarPrototype()->end()
+                ->end()
             ->end()
         ;
 

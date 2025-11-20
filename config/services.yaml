@@ -7,6 +7,15 @@ services:
     resource: '../src/*'
     exclude: '../src/{DependencyInjection,Entity,Tests,Kernel.php}'
 
+  Francoisvaillant\TwigTrace\Twig\Loader\DebugLoaderDecorator:
+    decorates: 'twig.loader.native_filesystem'
+    arguments:
+      $loader: '@.inner'
+      $debug: '%kernel.debug%'
+      $separatorStart: '%separator_start%'
+      $separatorEnd: '%separator_end%'
+      $excludedBlocks: '%excluded_blocks%'
+      $excludedPaths: '%excluded_paths%'
 
   Francoisvaillant\TwigTrace\Twig\Extension\HtmlCommentExtension:
     tags: [ 'twig.extension' ]
