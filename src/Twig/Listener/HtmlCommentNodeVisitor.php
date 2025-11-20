@@ -89,10 +89,10 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
     private function buildMessage(string $templateName, string $prefix = ''): string
     {
         /** @var string $separatorStart */
-        $separatorStart = (string)$this->separatorTemplateStart;
+        $separatorStart = (string) $this->separatorTemplateStart;
 
         /** @var string $separatorEnd */
-        $separatorEnd = (string)$this->separatorTemplateEnd;
+        $separatorEnd = (string) $this->separatorTemplateEnd;
 
         $parts = array_filter([
             $separatorStart,
