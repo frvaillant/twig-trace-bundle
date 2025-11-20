@@ -1,6 +1,9 @@
 # TwigTrace Bundle
 
-A Symfony bundle that automatically adds HTML comments to your rendered templates in development mode, making it easy to identify which Twig files, macros, and blocks are being used.
+A Symfony bundle that automatically adds HTML comments to your rendered templates in development mode, making it easy to identify which Twig files, macros, and blocks are being used.  
+![PHPStan](https://github.com/frvaillant/twig-trace-bundle/actions/workflows/code-quality.yml/badge.svg?job=phpstan)
+![PHP CS Fixer](https://github.com/frvaillant/twig-trace-bundle/actions/workflows/code-quality.yml/badge.svg?job=php-cs-fixer)
+
 
 ## Features
 
