@@ -6,7 +6,6 @@
 
 namespace Francoisvaillant\TwigTrace\Twig\Listener;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Environment;
 use Twig\Node\ModuleNode;
 use Twig\Node\Node;
@@ -19,7 +18,8 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
     private const EXCLUDED_TEMPLATES = ['@WebProfiler'];
 
     public function __construct(
-        private readonly ParameterBagInterface $parameterBag,
+        private readonly string $separatorTemplateStart,
+        private readonly string $separatorTemplateEnd,
     ) {
     }
 
@@ -89,10 +89,10 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
     private function buildMessage(string $templateName, string $prefix = ''): string
     {
         /** @var string $separatorStart */
-        $separatorStart = (string) $this->getParameter('separator_start');
+        $separatorStart = (string)$this->separatorTemplateStart;
 
         /** @var string $separatorEnd */
-        $separatorEnd = (string) $this->getParameter('separator_end');
+        $separatorEnd = (string)$this->separatorTemplateEnd;
 
         $parts = array_filter([
             $separatorStart,
@@ -101,16 +101,5 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
         ]);
 
         return implode(' ', $parts);
-    }
-
-    private function getParameter(string $key): string
-    {
-        $value = $this->parameterBag->get($key);
-
-        if (!is_string($value)) {
-            return '';
-        }
-
-        return $value;
     }
 }

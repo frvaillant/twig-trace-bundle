@@ -12,10 +12,15 @@ services:
     arguments:
       $loader: '@.inner'
       $debug: '%kernel.debug%'
-      $separatorStart: '%separator_start%'
-      $separatorEnd: '%separator_end%'
+      $separatorMacroStart: '%separator_macro_start%'
+      $separatorMacroEnd: '%separator_macro_end%'
+      $separatorBlockStart: '%separator_block_start%'
+      $separatorBlockEnd: '%separator_block_end%'
       $excludedBlocks: '%excluded_blocks%'
       $excludedPaths: '%excluded_paths%'
 
   Francoisvaillant\TwigTrace\Twig\Extension\HtmlCommentExtension:
     tags: [ 'twig.extension' ]
+    arguments:
+      $separatorTemplateStart: '%separator_template_start%'
+      $separatorTemplateEnd: '%separator_template_end%'

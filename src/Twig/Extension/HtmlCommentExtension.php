@@ -7,13 +7,13 @@
 namespace Francoisvaillant\TwigTrace\Twig\Extension;
 
 use Francoisvaillant\TwigTrace\Twig\Listener\HtmlCommentNodeVisitor;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Extension\AbstractExtension;
 
 class HtmlCommentExtension extends AbstractExtension
 {
     public function __construct(
-        private ParameterBagInterface $parameterBag,
+        private readonly string $separatorTemplateStart,
+        private readonly string $separatorTemplateEnd,
     ) {
     }
 
@@ -22,6 +22,6 @@ class HtmlCommentExtension extends AbstractExtension
      */
     public function getNodeVisitors(): array
     {
-        return [new HtmlCommentNodeVisitor($this->parameterBag)];
+        return [new HtmlCommentNodeVisitor($this->separatorTemplateStart, $this->separatorTemplateEnd)];
     }
 }

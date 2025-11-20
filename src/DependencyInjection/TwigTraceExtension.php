@@ -24,10 +24,19 @@ class TwigTraceExtension extends Extension
         $config        = $this->processConfiguration($configuration, $configs);
 
         /** @var string $separatorStart */
-        $separatorStart = $config['separator_start'];
-
+        $separatorStart = $config['separator_template_start'];
         /** @var string $separatorEnd */
-        $separatorEnd = $config['separator_end'];
+        $separatorEnd = $config['separator_template_end'];
+
+        /** @var string $separatorMacroStart */
+        $separatorMacroStart = $config['separator_macro_start'];
+        /** @var string $separatorMacroEnd */
+        $separatorMacroEnd = $config['separator_macro_end'];
+
+        /** @var string $separatorBlockStart */
+        $separatorBlockStart = $config['separator_block_start'];
+        /** @var string $separatorBlockEnd */
+        $separatorBlockEnd = $config['separator_block_end'];
 
         /** @var array<string> $excludedBlocks */
         $excludedBlocks = $config['excluded_blocks'];
@@ -35,8 +44,12 @@ class TwigTraceExtension extends Extension
         /** @var array<string> $excludedPaths */
         $excludedPaths = $config['excluded_paths'];
 
-        $container->setParameter('separator_start', $separatorStart);
-        $container->setParameter('separator_end', $separatorEnd);
+        $container->setParameter('separator_template_start', $separatorStart);
+        $container->setParameter('separator_template_end', $separatorEnd);
+        $container->setParameter('separator_macro_start', $separatorMacroStart);
+        $container->setParameter('separator_macro_end', $separatorMacroEnd);
+        $container->setParameter('separator_block_start', $separatorBlockStart);
+        $container->setParameter('separator_block_end', $separatorBlockEnd);
         $container->setParameter('excluded_blocks', $excludedBlocks);
         $container->setParameter('excluded_paths', $excludedPaths);
 

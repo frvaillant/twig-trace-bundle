@@ -21,8 +21,10 @@ class DebugLoaderDecorator implements LoaderInterface
     public function __construct(
         private readonly LoaderInterface $loader,
         private readonly bool $debug,
-        private readonly string $separatorStart,
-        private readonly string $separatorEnd,
+        private readonly string $separatorMacroStart,
+        private readonly string $separatorMacroEnd,
+        private readonly string $separatorBlockStart,
+        private readonly string $separatorBlockEnd,
         private readonly array $excludedBlocks,
         private readonly array $excludedPaths,
     ) {
@@ -94,15 +96,15 @@ class DebugLoaderDecorator implements LoaderInterface
                 "{%% macro %s(%s) %%}\n\n<!-- %s MACRO : %s::%s %s -->\n%s\n<!-- %s END MACRO : %s::%s %s -->\n{%% endmacro %%}",
                 $macroName,
                 $macroParams,
-                $this->separatorStart,
+                $this->separatorMacroStart,
                 $templateName,
                 $macroName,
-                $this->separatorEnd,
+                $this->separatorMacroEnd,
                 $macroContent,
-                $this->separatorStart,
+                $this->separatorMacroStart,
                 $templateName,
                 $macroName,
-                $this->separatorEnd
+                $this->separatorMacroEnd
             );
         }, $code);
 
@@ -124,15 +126,15 @@ class DebugLoaderDecorator implements LoaderInterface
             return sprintf(
                 "{%% block %s %%}\n\n<!-- %s BLOCK : %s::%s %s -->\n%s\n<!-- %s END BLOCK : %s::%s %s -->\n{%% endblock %%}",
                 $blockName,
-                $this->separatorStart,
+                $this->separatorBlockStart,
                 $templateName,
                 $blockName,
-                $this->separatorEnd,
+                $this->separatorBlockEnd,
                 $blockContent,
-                $this->separatorStart,
+                $this->separatorBlockStart,
                 $templateName,
                 $blockName,
-                $this->separatorEnd
+                $this->separatorBlockEnd
             );
         }, $code);
 
