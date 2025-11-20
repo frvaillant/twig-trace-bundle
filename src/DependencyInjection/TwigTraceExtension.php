@@ -15,7 +15,7 @@ class TwigTraceExtension extends Extension
 {
 
     /**
-     * @param array $configs
+     * @param array<string, mixed> $configs
      * @param ContainerBuilder $container
      * @return void
      * @throws \Exception
@@ -24,6 +24,14 @@ class TwigTraceExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+        /** @var array{
+         *     separator_start: string,
+         *     separator_end: string,
+         *     excluded_blocks: array<string>,
+         *     excluded_paths: array<string>
+         * } $config
+         */
 
         $container->setParameter('separator_start', $config['separator_start']);
         $container->setParameter('separator_end', $config['separator_end']);

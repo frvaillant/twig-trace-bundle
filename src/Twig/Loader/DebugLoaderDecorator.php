@@ -14,6 +14,10 @@ class DebugLoaderDecorator implements LoaderInterface
 {
     private const EXCLUDED_TEMPLATES = ['@WebProfiler'];
 
+    /**
+     * @param array<string> $excludedBlocks
+     * @param array<string> $excludedPaths
+     */
     public function __construct(
         private readonly LoaderInterface $loader,
         private readonly bool $debug,
@@ -93,7 +97,7 @@ class DebugLoaderDecorator implements LoaderInterface
     private function shouldExclude(string $name): bool
     {
         foreach ([...self::EXCLUDED_TEMPLATES, ...$this->excludedPaths] as $excluded) {
-            if (str_contains($name, $excluded)) {
+            if (str_contains((string) $name, (string) $excluded)) {
                 return true;
             }
         }
@@ -110,10 +114,9 @@ class DebugLoaderDecorator implements LoaderInterface
     private function wrapMacros(string $code, string $templateName): string
     {
 
-        // Regex pour détecter les macros : {% macro nom(params) %}...{% endmacro %}
         $pattern = '/{%\s*macro\s+(\w+)\s*\((.*?)\)\s*%}(.*?){%\s*endmacro\s*%}/s';
 
-        return preg_replace_callback($pattern, function ($matches) use ($templateName) {
+        $result = preg_replace_callback($pattern, function ($matches) use ($templateName) {
 
             $macroName = $matches[1];
             $macroParams = $matches[2];
@@ -134,6 +137,8 @@ class DebugLoaderDecorator implements LoaderInterface
                 $this->separatorEnd
             );
         }, $code);
+
+        return $result ?? $code;
     }
 
     /**
@@ -146,7 +151,7 @@ class DebugLoaderDecorator implements LoaderInterface
     {
         $pattern = '/{%\s*block\s+(\w+)\s*%}(.*?){%\s*endblock\s*%}/s';
 
-        return preg_replace_callback($pattern, function ($matches) use ($templateName) {
+        $result = preg_replace_callback($pattern, function ($matches) use ($templateName) {
 
             $blockName = $matches[1];
             $blockContent = $matches[2];
@@ -169,6 +174,8 @@ class DebugLoaderDecorator implements LoaderInterface
                 $this->separatorEnd
             );
         }, $code);
+
+        return $result ?? $code;
     }
 
 

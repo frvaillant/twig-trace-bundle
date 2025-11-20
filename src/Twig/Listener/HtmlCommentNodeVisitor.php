@@ -31,7 +31,7 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
     public function enterNode(Node $node, Environment $env): Node
     {
         if ($this->shouldAddComments($node, $env)) {
-            $templateName = $node->getTemplateName();
+            $templateName = (string) $node->getTemplateName();
 
             $node->setNode('display_start', $this->createStartComment($templateName, $node->getTemplateLine()));
             $node->setNode('display_end', $this->createEndComment($templateName, $node->getTemplateLine()));
@@ -69,7 +69,7 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
             return false;
         }
 
-        $templateName = $node->getTemplateName();
+        $templateName = (string) $node->getTemplateName();
 
         foreach (self::EXCLUDED_TEMPLATES as $excluded) {
             if (str_contains($templateName, $excluded)) {
@@ -126,8 +126,11 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
      */
     private function buildMessage(string $templateName, string $prefix = ''): string
     {
-        $separatorStart = $this->getParameter('separator_start');
-        $separatorEnd = $this->getParameter('separator_end');
+        /** @var string $separatorStart */
+        $separatorStart = (string) $this->getParameter('separator_start');
+
+        /** @var string $separatorEnd */
+        $separatorEnd = (string) $this->getParameter('separator_end');
 
         $parts = array_filter([
             $separatorStart,
@@ -144,6 +147,12 @@ class HtmlCommentNodeVisitor implements NodeVisitorInterface
      */
     private function getParameter(string $key): string
     {
-        return (string) $this->parameterBag->get($key);
+        $value = $this->parameterBag->get($key);
+
+        if (!is_string($value)) {
+            return '';
+        }
+
+        return $value;
     }
 }
