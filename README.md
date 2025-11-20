@@ -191,9 +191,8 @@ Created by [François Vaillant](https://github.com/francoisvaillant)
 
 ## Support
 
-- 🐛 [Report a bug](https://github.com/francoisvaillant/twig-trace/issues)
-- 💡 [Request a feature](https://github.com/francoisvaillant/twig-trace/issues)
-- 📖 [Documentation](https://github.com/francoisvaillant/twig-trace)
+- 🐛 [Report a bug](https://github.com/frvaillant/twig-trace-bundle/issues)
+- 💡 [Request a feature](https://github.com/frvaillant/twig-trace-bundle/issues)
 
 ## Todo
 - Add unit tests
