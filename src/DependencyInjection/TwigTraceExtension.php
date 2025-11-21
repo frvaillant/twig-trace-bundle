@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class TwigTraceExtension extends Extension
 {
     /**
-     * @param array<string, mixed> $configs
+     * @param array<int, array<string, mixed>> $configs
      *
      * @throws \Exception
      */

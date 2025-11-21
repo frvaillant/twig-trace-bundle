@@ -47,3 +47,17 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-interaction
       - name: Run composer audit
         run: composer audit
+
+  phpunit:
+    name: PHPUnit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --testdox --colors=always tests
