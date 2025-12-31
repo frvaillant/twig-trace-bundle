@@ -1,39 +1,39 @@
 {
-    "name": "francoisvaillant/twig-trace-bundle",
+  "name": "francoisvaillant/twig-trace-bundle",
   "description": "A Symfony bundle that automatically adds HTML comments to your rendered templates in development mode, making it easy to identify which Twig files, macros, and blocks are being used.\n",
-    "type": "symfony-bundle",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Francoisvaillant\\TwigTrace\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Francois Vaillant",
-            "email": "frvaillant@gmail.com"
-        }
-    ],
-    "require": {
-
-      "php": ">=8.1",
-      "symfony/http-kernel": "^6.0 || ^7.0",
-      "symfony/dependency-injection": "^6.0 || ^7.0",
-      "symfony/config": "^6.0 || ^7.0",
-      "symfony/yaml": "^6.4 || ^7.0",
-      "symfony/twig-bundle": "6.4.*"
-    },
-
-    "require-dev": {
-      "symfony/browser-kit": "6.4.*",
-      "symfony/css-selector": "6.4.*",
-      "phpstan/phpstan-symfony": "^2.0",
-      "friendsofphp/php-cs-fixer": "^3.89",
-        "symfony/test-pack": "^1.0"
-    },
-    "extra": {
-      "symfony": {
-        "bundle": ["Francoisvaillant\\TwigTrace\\TwigTraceBundle"]
-      }
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Francoisvaillant\\TwigTrace\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Francois Vaillant",
+      "email": "frvaillant@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.1",
+    "symfony/http-kernel": "^6.4 || ^7.0",
+    "symfony/dependency-injection": "^6.4 || ^7.0",
+    "symfony/config": "^6.4 || ^7.0",
+    "symfony/yaml": "^6.4 || ^7.0",
+    "symfony/twig-bundle": "^6.4 || ^7.0"
+  },
+  "require-dev": {
+    "symfony/browser-kit": "^6.4 || ^7.0",
+    "symfony/css-selector": "^6.4 || ^7.0",
+    "phpstan/phpstan-symfony": "^2.0",
+    "friendsofphp/php-cs-fixer": "^3.89",
+    "symfony/test-pack": "^1.0"
+  },
+  "extra": {
+    "symfony": {
+      "bundle": [
+        "Francoisvaillant\\TwigTrace\\TwigTraceBundle"
+      ]
+    }
+  }
 }
