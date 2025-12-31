@@ -16,6 +16,9 @@ use Twig\Loader\ArrayLoader;
  */
 class FullStackRenderingTest extends TestCase
 {
+    /**
+     * @param array<string,string> $templates
+     */
     private function createEnvironment(array $templates, bool $debug = true): Environment
     {
         $innerLoader = new ArrayLoader($templates);
@@ -32,8 +35,8 @@ class FullStackRenderingTest extends TestCase
         );
 
         $env = new Environment($decoratedLoader, [
-            'debug' => $debug,
-            'cache' => false,
+            'debug'      => $debug,
+            'cache'      => false,
             'autoescape' => false,
         ]);
 
@@ -65,7 +68,7 @@ Child content
 TWIG,
         ];
 
-        $env = $this->createEnvironment($templates);
+        $env  = $this->createEnvironment($templates);
         $html = $env->render('child.html.twig');
 
         // Verify template comments
@@ -108,7 +111,7 @@ Outer end
 TWIG,
         ];
 
-        $env = $this->createEnvironment($templates);
+        $env  = $this->createEnvironment($templates);
         $html = $env->render('nested.html.twig');
 
         // Outer block should be wrapped
@@ -133,7 +136,7 @@ TWIG,
 TWIG,
         ];
 
-        $env = $this->createEnvironment($templates);
+        $env  = $this->createEnvironment($templates);
         $html = $env->render('macros.html.twig');
 
         // Both macros should be wrapped
@@ -156,7 +159,7 @@ TWIG,
 TWIG,
         ];
 
-        $env = $this->createEnvironment($templates);
+        $env  = $this->createEnvironment($templates);
         $html = $env->render('@WebProfiler/toolbar.html.twig');
 
         // No comments should be added for excluded paths
@@ -177,7 +180,7 @@ TWIG,
 TWIG,
         ];
 
-        $env = $this->createEnvironment($templates, false);
+        $env  = $this->createEnvironment($templates, false);
         $html = $env->render('clean.html.twig');
 
         // No debug comments when debug is disabled
@@ -207,7 +210,7 @@ TWIG,
 TWIG,
         ];
 
-        $env = $this->createEnvironment($templates);
+        $env  = $this->createEnvironment($templates);
         $html = $env->render('child.html.twig');
 
         // Template comment for the rendered template
@@ -242,7 +245,7 @@ TWIG,
 TWIG,
         ];
 
-        $env = $this->createEnvironment($templates);
+        $env  = $this->createEnvironment($templates);
         $html = $env->render('page.html.twig');
 
         // Template comments
