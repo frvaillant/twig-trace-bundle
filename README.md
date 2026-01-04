@@ -25,7 +25,7 @@ A Symfony bundle that automatically adds HTML comments to your rendered template
 Install the bundle via Composer:
 
 ```bash
-composer require francoisvaillant/twig-trace
+composer require francoisvaillant/twig-trace-bundle
 ```
 
 If you're not using Symfony Flex, manually register the bundle in `config/bundles.php`:
@@ -218,7 +218,7 @@ If you want to disable all tracing for one template file, use `excluded_paths` i
 
 ### "A template that extends another one cannot include content outside Twig blocks"
 
-This error should not occur with TwigTrace. If you see it, please [open an issue](https://github.com/francoisvaillant/twig-trace/issues).
+This error should not occur with TwigTrace. If you see it, please [open an issue](https://github.com/francoisvaillant/twig-trace-bundle/issues).
 
 ## Contributing
 
