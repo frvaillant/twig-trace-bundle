@@ -88,12 +88,16 @@ twig_trace:
         - meta
         - stylesheets
         - javascripts
+        # For Sylius, add the following line
+        - body_class
     
     # Template paths to exclude from tracing
     excluded_paths:
         - 'email/'           # Exclude email templates
         - 'pdf/'             # Exclude PDF templates
         - '@EasyAdmin'       # Exclude EasyAdmin templates
+        # For Sylius, add the following line
+        - '@SyliusUi/macro/rtl.html.twig'
 ```
 
 ### Configuration Reference
