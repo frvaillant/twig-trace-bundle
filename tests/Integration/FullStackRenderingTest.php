@@ -287,4 +287,36 @@ TWIG,
         $this->assertStringContainsString('<div class="alert-success">Operation completed!</div>', $html);
         $this->assertStringContainsString('<i class="fa-check"></i>', $html);
     }
+
+    public function testGlobalMacroExclusionAppliesAcrossMultipleTemplates(): void
+    {
+        $templates = [
+            'form_macros.html.twig' => <<<'TWIG'
+{% macro input(name) %}<input name="{{ name }}">{% endmacro %}
+{% macro button(label) %}<button>{{ label }}</button>{% endmacro %}
+TWIG,
+            'filter_macros.html.twig' => <<<'TWIG'
+{% macro input(name) %}<label>{{ name }}</label>{% endmacro %}
+TWIG,
+            'page.html.twig' => <<<'TWIG'
+{% import 'form_macros.html.twig' as form %}
+{% import 'filter_macros.html.twig' as filters %}
+{% block content %}
+{{ form.input('email') }}
+{{ form.button('Save') }}
+{{ filters.input('status') }}
+{% endblock %}
+TWIG,
+        ];
+
+        $env  = $this->createEnvironment($templates, true, ['input']);
+        $html = $env->render('page.html.twig');
+
+        $this->assertStringNotContainsString('MACRO : form_macros.html.twig::input', $html);
+        $this->assertStringNotContainsString('MACRO : filter_macros.html.twig::input', $html);
+        $this->assertStringContainsString('MACRO : form_macros.html.twig::button', $html);
+        $this->assertStringContainsString('<input name="email">', $html);
+        $this->assertStringContainsString('<button>Save</button>', $html);
+        $this->assertStringContainsString('<label>status</label>', $html);
+    }
 }

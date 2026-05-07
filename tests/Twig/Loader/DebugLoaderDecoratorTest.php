@@ -177,4 +177,39 @@ TWIG;
         $this->assertStringNotContainsString('MACRO : templates/base.html.twig::item', $code);
         $this->assertStringContainsString('MACRO : templates/base.html.twig::badge', $code);
     }
+
+    public function testTemplateSpecificMacroExclusionDoesNotAffectOtherTemplates(): void
+    {
+        $excludedMacros = ['templates/first.html.twig::item'];
+
+        $firstDecorator = new DebugLoaderDecorator(
+            $this->makeInnerLoader($this->getBaseTemplate(), 'templates/first.html.twig'),
+            true,
+            '',   // separatorMacroStart
+            '',   // separatorMacroEnd
+            '',   // separatorBlockStart
+            '',   // separatorBlockEnd
+            [],      // excludedBlocks
+            $excludedMacros,
+            [],      // excludedPaths
+        );
+
+        $secondDecorator = new DebugLoaderDecorator(
+            $this->makeInnerLoader($this->getBaseTemplate(), 'templates/second.html.twig'),
+            true,
+            '',   // separatorMacroStart
+            '',   // separatorMacroEnd
+            '',   // separatorBlockStart
+            '',   // separatorBlockEnd
+            [],      // excludedBlocks
+            $excludedMacros,
+            [],      // excludedPaths
+        );
+
+        $firstCode  = $firstDecorator->getSourceContext('templates/first.html.twig')->getCode();
+        $secondCode = $secondDecorator->getSourceContext('templates/second.html.twig')->getCode();
+
+        $this->assertStringNotContainsString('MACRO : templates/first.html.twig::item', $firstCode);
+        $this->assertStringContainsString('MACRO : templates/second.html.twig::item', $secondCode);
+    }
 }

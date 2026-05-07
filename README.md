@@ -237,5 +237,3 @@ Created by [François Vaillant](https://github.com/frvaillant)
 - 🐛 [Report a bug](https://github.com/frvaillant/twig-trace-bundle/issues)
 - 💡 [Request a feature](https://github.com/frvaillant/twig-trace-bundle/issues)
 
-## Todo
-- Add unit tests
