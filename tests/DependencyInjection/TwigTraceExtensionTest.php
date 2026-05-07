@@ -40,6 +40,7 @@ class TwigTraceExtensionTest extends TestCase
                 'separator_template_start' => '///',
                 'separator_template_end'   => '///',
                 'excluded_blocks'          => ['a', 'b'],
+                'excluded_macros'          => ['item', 'base.html.twig::button'],
                 'excluded_paths'           => ['admin', 'debug'],
             ]]
         );
@@ -53,6 +54,7 @@ class TwigTraceExtensionTest extends TestCase
         $this->assertSame('///', $container->getParameter('separator_template_start'));
         $this->assertSame('///', $container->getParameter('separator_template_end'));
         $this->assertSame(['a', 'b'], $container->getParameter('excluded_blocks'));
+        $this->assertSame(['item', 'base.html.twig::button'], $container->getParameter('excluded_macros'));
         $this->assertSame(['admin', 'debug'], $container->getParameter('excluded_paths'));
     }
 }

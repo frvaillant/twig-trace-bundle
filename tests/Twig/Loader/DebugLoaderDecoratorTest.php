@@ -18,6 +18,7 @@ class DebugLoaderDecoratorTest extends TestCase
 {% block content %}Hello{% endblock %}
 
 {% macro item(name) %}Item: {{ name }}{% endmacro %}
+{% macro badge(label) %}<span>{{ label }}</span>{% endmacro %}
 TWIG;
     }
 
@@ -61,6 +62,7 @@ TWIG;
             '<<<',   // separatorBlockStart
             '>>>',   // separatorBlockEnd
             [],      // excludedBlocks
+            [],      // excludedMacros
             [],      // excludedPaths
         );
 
@@ -84,6 +86,7 @@ TWIG;
             '',   // separatorBlockStart
             '',   // separatorBlockEnd
             ['title'],      // excludedBlocks
+            [],      // excludedMacros
             [],      // excludedPaths
         );
 
@@ -106,6 +109,7 @@ TWIG;
             '',   // separatorBlockStart
             '',   // separatorBlockEnd
             [],      // excludedBlocks
+            [],      // excludedMacros
             ['admin/'],      // excludedPaths
         );
 
@@ -124,10 +128,53 @@ TWIG;
             '',   // separatorBlockStart
             '',   // separatorBlockEnd
             [],      // excludedBlocks
+            [],      // excludedMacros
             [],      // excludedPaths
         );
 
         $source = $decorator->getSourceContext('templates/base.html.twig');
         $this->assertSame($this->getBaseTemplate(), $source->getCode());
+    }
+
+    public function testExcludedMacrosByNameAreNotWrapped(): void
+    {
+        $inner     = $this->makeInnerLoader($this->getBaseTemplate());
+        $decorator = new DebugLoaderDecorator(
+            $inner,
+            true,
+            '',   // separatorMacroStart
+            '',   // separatorMacroEnd
+            '',   // separatorBlockStart
+            '',   // separatorBlockEnd
+            [],      // excludedBlocks
+            ['item'],      // excludedMacros
+            [],      // excludedPaths
+        );
+
+        $code = $decorator->getSourceContext('templates/base.html.twig')->getCode();
+
+        $this->assertStringNotContainsString('MACRO : templates/base.html.twig::item', $code);
+        $this->assertStringContainsString('MACRO : templates/base.html.twig::badge', $code);
+    }
+
+    public function testExcludedMacrosByTemplateAndNameAreNotWrapped(): void
+    {
+        $inner     = $this->makeInnerLoader($this->getBaseTemplate());
+        $decorator = new DebugLoaderDecorator(
+            $inner,
+            true,
+            '',   // separatorMacroStart
+            '',   // separatorMacroEnd
+            '',   // separatorBlockStart
+            '',   // separatorBlockEnd
+            [],      // excludedBlocks
+            ['templates/base.html.twig::item'],      // excludedMacros
+            [],      // excludedPaths
+        );
+
+        $code = $decorator->getSourceContext('templates/base.html.twig')->getCode();
+
+        $this->assertStringNotContainsString('MACRO : templates/base.html.twig::item', $code);
+        $this->assertStringContainsString('MACRO : templates/base.html.twig::badge', $code);
     }
 }

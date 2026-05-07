@@ -41,6 +41,9 @@ class TwigTraceExtension extends Extension
         /** @var array<string> $excludedBlocks */
         $excludedBlocks = $config['excluded_blocks'];
 
+        /** @var array<string> $excludedMacros */
+        $excludedMacros = $config['excluded_macros'];
+
         /** @var array<string> $excludedPaths */
         $excludedPaths = $config['excluded_paths'];
 
@@ -51,6 +54,7 @@ class TwigTraceExtension extends Extension
         $container->setParameter('separator_block_start', $separatorBlockStart);
         $container->setParameter('separator_block_end', $separatorBlockEnd);
         $container->setParameter('excluded_blocks', $excludedBlocks);
+        $container->setParameter('excluded_macros', $excludedMacros);
         $container->setParameter('excluded_paths', $excludedPaths);
 
         $loader = new YamlFileLoader(

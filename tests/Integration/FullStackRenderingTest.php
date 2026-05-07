@@ -18,8 +18,9 @@ class FullStackRenderingTest extends TestCase
 {
     /**
      * @param array<string,string> $templates
+     * @param array<string>        $excludedMacros
      */
-    private function createEnvironment(array $templates, bool $debug = true): Environment
+    private function createEnvironment(array $templates, bool $debug = true, array $excludedMacros = []): Environment
     {
         $innerLoader = new ArrayLoader($templates);
 
@@ -31,6 +32,7 @@ class FullStackRenderingTest extends TestCase
             '<<<',   // separatorBlockStart
             '>>>',   // separatorBlockEnd
             ['head'], // excludedBlocks
+            $excludedMacros,
             ['@WebProfiler'], // excludedPaths
         );
 
@@ -259,5 +261,30 @@ TWIG,
 
         // Verify rendered output
         $this->assertStringContainsString('<div class="alert-success">Operation completed!</div>', $html);
+    }
+
+    public function testExcludedImportedMacroStillRendersWithoutComments(): void
+    {
+        $templates = [
+            'macros_library.html.twig' => <<<'TWIG'
+{% macro alert(type, message) %}<div class="alert-{{ type }}">{{ message }}</div>{% endmacro %}
+{% macro icon(name) %}<i class="{{ name }}"></i>{% endmacro %}
+TWIG,
+            'page.html.twig' => <<<'TWIG'
+{% import 'macros_library.html.twig' as ui %}
+{% block content %}
+{{ ui.alert('success', 'Operation completed!') }}
+{{ ui.icon('fa-check') }}
+{% endblock %}
+TWIG,
+        ];
+
+        $env  = $this->createEnvironment($templates, true, ['macros_library.html.twig::alert']);
+        $html = $env->render('page.html.twig');
+
+        $this->assertStringNotContainsString('MACRO : macros_library.html.twig::alert', $html);
+        $this->assertStringContainsString('MACRO : macros_library.html.twig::icon', $html);
+        $this->assertStringContainsString('<div class="alert-success">Operation completed!</div>', $html);
+        $this->assertStringContainsString('<i class="fa-check"></i>', $html);
     }
 }

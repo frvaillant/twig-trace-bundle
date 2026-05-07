@@ -88,7 +88,12 @@ twig_trace:
         - meta
         - stylesheets
         - javascripts
-    
+
+    # Macros to exclude from wrapping
+    excluded_macros:
+        - input
+        - 'macros/forms.html.twig::textarea'
+     
     # Template paths to exclude from tracing
     excluded_paths:
         - 'email/'           # Exclude email templates
@@ -107,6 +112,7 @@ twig_trace:
 | `separator_block_start`    | `string` | `''` | Separator displayed at the start of comments for blocks    |
 | `separator_block_end`      | `string` | `''` | Separator displayed at the end of comments for blocks      |
 | `excluded_blocks`          | `array` | `['title', 'meta', 'stylesheets', 'javascripts']` | Block names to exclude from wrapping                       |
+| `excluded_macros`          | `array` | `[]` | Macro names or exact `template::macro` pairs to exclude from wrapping |
 | `excluded_paths`           | `array` | `[]` | Template paths to exclude (supports partial matches)       |
 
 **Note:** `@WebProfiler` templates are always excluded automatically.
@@ -185,6 +191,22 @@ twig_trace:
         - head
 ```
 Note that if you customize the excluded_blocks configuration, the default settings will not be applied anymore.  
+
+### Exclude Specific Macros
+
+Macros can be excluded globally by name or for one exact template:
+
+```yaml
+twig_trace:
+    excluded_macros:
+        - input
+        - 'forms/macros.html.twig::textarea'
+```
+
+- `input` excludes that macro name everywhere
+- `forms/macros.html.twig::textarea` excludes only that macro in that exact template
+
+If you want to disable all tracing for one template file, use `excluded_paths` instead.
 
 ## Troubleshooting
 

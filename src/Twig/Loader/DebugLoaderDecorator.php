@@ -16,6 +16,7 @@ class DebugLoaderDecorator implements LoaderInterface
 
     /**
      * @param array<string> $excludedBlocks
+     * @param array<string> $excludedMacros
      * @param array<string> $excludedPaths
      */
     public function __construct(
@@ -26,6 +27,7 @@ class DebugLoaderDecorator implements LoaderInterface
         private readonly string $separatorBlockStart,
         private readonly string $separatorBlockEnd,
         private readonly array $excludedBlocks,
+        private readonly array $excludedMacros,
         private readonly array $excludedPaths,
     ) {
     }
@@ -92,6 +94,10 @@ class DebugLoaderDecorator implements LoaderInterface
             $macroParams  = $matches[2];
             $macroContent = $matches[3];
 
+            if ($this->shouldExcludeMacro($templateName, $macroName)) {
+                return $matches[0];
+            }
+
             return sprintf(
                 "{%% macro %s(%s) %%}\n\n<!-- %s MACRO : %s::%s %s -->\n%s\n<!-- %s END MACRO : %s::%s %s -->\n{%% endmacro %%}",
                 $macroName,
@@ -109,6 +115,12 @@ class DebugLoaderDecorator implements LoaderInterface
         }, $code);
 
         return $result ?? $code;
+    }
+
+    private function shouldExcludeMacro(string $templateName, string $macroName): bool
+    {
+        return in_array($macroName, $this->excludedMacros, true)
+            || in_array(sprintf('%s::%s', $templateName, $macroName), $this->excludedMacros, true);
     }
 
     private function wrapBlocks(string $code, string $templateName): string
