@@ -40,7 +40,7 @@ class ConfigurationTest extends TestCase
             'separator_block_end'      => ']]]',
             'separator_template_start' => '///',
             'separator_template_end'   => '///',
-            'excluded_blocks'          => ['head', 'scripts'],
+            'excluded_blocks'          => ['head', 'scripts', 'base.html.twig::content'],
             'excluded_macros'          => ['input', 'forms/macros.html.twig::textarea'],
             'excluded_paths'           => ['admin/', '@WebProfiler'],
         ]];
@@ -53,7 +53,7 @@ class ConfigurationTest extends TestCase
         $this->assertSame(']]]', $processed['separator_block_end']);
         $this->assertSame('///', $processed['separator_template_start']);
         $this->assertSame('///', $processed['separator_template_end']);
-        $this->assertSame(['head', 'scripts'], $processed['excluded_blocks']);
+        $this->assertSame(['head', 'scripts', 'base.html.twig::content'], $processed['excluded_blocks']);
         $this->assertSame(['input', 'forms/macros.html.twig::textarea'], $processed['excluded_macros']);
         $this->assertSame(['admin/', '@WebProfiler'], $processed['excluded_paths']);
     }

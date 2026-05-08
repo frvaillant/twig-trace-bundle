@@ -119,8 +119,12 @@ class DebugLoaderDecorator implements LoaderInterface
 
     private function shouldExcludeMacro(string $templateName, string $macroName): bool
     {
-        return in_array($macroName, $this->excludedMacros, true)
-            || in_array(sprintf('%s::%s', $templateName, $macroName), $this->excludedMacros, true);
+        return $this->matchesScopedExclusion($this->excludedMacros, $templateName, $macroName);
+    }
+
+    private function shouldExcludeBlock(string $templateName, string $blockName): bool
+    {
+        return $this->matchesScopedExclusion($this->excludedBlocks, $templateName, $blockName);
     }
 
     private function wrapBlocks(string $code, string $templateName): string
@@ -131,7 +135,7 @@ class DebugLoaderDecorator implements LoaderInterface
             $blockName    = $matches[1];
             $blockContent = $matches[2];
 
-            if (in_array($blockName, $this->excludedBlocks, true)) {
+            if ($this->shouldExcludeBlock($templateName, $blockName)) {
                 return $matches[0];
             }
 
@@ -151,5 +155,14 @@ class DebugLoaderDecorator implements LoaderInterface
         }, $code);
 
         return $result ?? $code;
+    }
+
+    /**
+     * @param array<string> $excludedEntries
+     */
+    private function matchesScopedExclusion(array $excludedEntries, string $templateName, string $name): bool
+    {
+        return in_array($name, $excludedEntries, true)
+            || in_array(sprintf('%s::%s', $templateName, $name), $excludedEntries, true);
     }
 }

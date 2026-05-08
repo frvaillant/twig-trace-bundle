@@ -82,17 +82,20 @@ twig_trace:
     separator_block_start: '{{{{{{'
     separator_block_end: '}}}}}}'
     
-    # Blocks to exclude from wrapping (useful for <title>, <meta>, etc.)
+    # Blocks to exclude from wrapping.
+    # Use a block name to exclude it everywhere, or template::block for one exact Twig template name.
     excluded_blocks:
         - title
         - meta
         - stylesheets
         - javascripts
+        - '@Acme/base.html.twig::content'
 
-    # Macros to exclude from wrapping
+    # Macros to exclude from wrapping.
+    # Use a macro name to exclude it everywhere, or template::macro for one exact Twig template name.
     excluded_macros:
         - input
-        - 'macros/forms.html.twig::textarea'
+        - '@Acme/base.html.twig::button'
      
     # Template paths to exclude from tracing
     excluded_paths:
@@ -111,7 +114,7 @@ twig_trace:
 | `separator_macro_end`      | `string` | `''` | Separator displayed at the end of comments for macros      |
 | `separator_block_start`    | `string` | `''` | Separator displayed at the start of comments for blocks    |
 | `separator_block_end`      | `string` | `''` | Separator displayed at the end of comments for blocks      |
-| `excluded_blocks`          | `array` | `['title', 'meta', 'stylesheets', 'javascripts']` | Block names to exclude from wrapping                       |
+| `excluded_blocks`          | `array` | `['title', 'meta', 'stylesheets', 'javascripts']` | Block names or exact `template::block` pairs to exclude from wrapping |
 | `excluded_macros`          | `array` | `[]` | Macro names or exact `template::macro` pairs to exclude from wrapping |
 | `excluded_paths`           | `array` | `[]` | Template paths to exclude (supports partial matches)       |
 
@@ -189,22 +192,29 @@ twig_trace:
         - title
         - meta
         - head
+        - '@Acme/base.html.twig::content'
 ```
+
+- `title` excludes that block name everywhere.
+- `@Acme/base.html.twig::content` excludes only `content` in that exact Twig template name.
+
 Note that if you customize the excluded_blocks configuration, the default settings will not be applied anymore.  
 
 ### Exclude Specific Macros
 
-Macros can be excluded globally by name or for one exact template:
+Macros can be excluded globally by name or for one exact Twig template name:
 
 ```yaml
 twig_trace:
     excluded_macros:
         - input
-        - 'forms/macros.html.twig::textarea'
+        - '@Acme/base.html.twig::button'
 ```
 
-- `input` excludes that macro name everywhere
-- `forms/macros.html.twig::textarea` excludes only that macro in that exact template
+- `input` excludes that macro name everywhere.
+- `@Acme/base.html.twig::button` excludes only `button` in that exact Twig template name.
+
+**Note:** Template-specific `template::block` and `template::macro` entries must match the exact template name Twig uses. For namespaced templates, use values like `@Acme/base.html.twig::content` and `@Acme/base.html.twig::button`.
 
 If you want to disable all tracing for one template file, use `excluded_paths` instead.
 
@@ -236,4 +246,3 @@ Created by [François Vaillant](https://github.com/frvaillant)
 
 - 🐛 [Report a bug](https://github.com/frvaillant/twig-trace-bundle/issues)
 - 💡 [Request a feature](https://github.com/frvaillant/twig-trace-bundle/issues)
-

@@ -19,8 +19,9 @@ class FullStackRenderingTest extends TestCase
     /**
      * @param array<string,string> $templates
      * @param array<string>        $excludedMacros
+     * @param array<string>        $excludedBlocks
      */
-    private function createEnvironment(array $templates, bool $debug = true, array $excludedMacros = []): Environment
+    private function createEnvironment(array $templates, bool $debug = true, array $excludedMacros = [], array $excludedBlocks = ['head']): Environment
     {
         $innerLoader = new ArrayLoader($templates);
 
@@ -31,7 +32,7 @@ class FullStackRenderingTest extends TestCase
             '>>>',   // separatorMacroEnd
             '<<<',   // separatorBlockStart
             '>>>',   // separatorBlockEnd
-            ['head'], // excludedBlocks
+            $excludedBlocks,
             $excludedMacros,
             ['@WebProfiler'], // excludedPaths
         );
@@ -318,5 +319,29 @@ TWIG,
         $this->assertStringContainsString('<input name="email">', $html);
         $this->assertStringContainsString('<button>Save</button>', $html);
         $this->assertStringContainsString('<label>status</label>', $html);
+    }
+
+    public function testTemplateSpecificBlockExclusionInInheritanceDoesNotAffectChildOverride(): void
+    {
+        $templates = [
+            'base.html.twig' => <<<'TWIG'
+{% block content %}Base content{% endblock %}
+TWIG,
+            'child.html.twig' => <<<'TWIG'
+{% extends 'base.html.twig' %}
+{% block content %}
+{{ parent() }}
+Child content
+{% endblock %}
+TWIG,
+        ];
+
+        $env  = $this->createEnvironment($templates, true, [], ['head', 'base.html.twig::content']);
+        $html = $env->render('child.html.twig');
+
+        $this->assertStringContainsString('BLOCK : child.html.twig::content', $html);
+        $this->assertStringNotContainsString('BLOCK : base.html.twig::content', $html);
+        $this->assertStringContainsString('Base content', $html);
+        $this->assertStringContainsString('Child content', $html);
     }
 }

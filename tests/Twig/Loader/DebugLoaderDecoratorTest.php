@@ -98,6 +98,27 @@ TWIG;
         $this->assertStringContainsString('BLOCK : templates/base.html.twig::content', $code);
     }
 
+    public function testExcludedBlocksByTemplateAndNameAreNotWrapped(): void
+    {
+        $inner     = $this->makeInnerLoader($this->getBaseTemplate());
+        $decorator = new DebugLoaderDecorator(
+            $inner,
+            true,
+            '',   // separatorMacroStart
+            '',   // separatorMacroEnd
+            '',   // separatorBlockStart
+            '',   // separatorBlockEnd
+            ['templates/base.html.twig::title'],      // excludedBlocks
+            [],      // excludedMacros
+            [],      // excludedPaths
+        );
+
+        $code = $decorator->getSourceContext('templates/base.html.twig')->getCode();
+
+        $this->assertStringNotContainsString('BLOCK : templates/base.html.twig::title', $code);
+        $this->assertStringContainsString('BLOCK : templates/base.html.twig::content', $code);
+    }
+
     public function testExcludedPathsBypassWrapping(): void
     {
         $inner     = $this->makeInnerLoader($this->getBaseTemplate(), 'admin/panel.html.twig');
@@ -211,5 +232,40 @@ TWIG;
 
         $this->assertStringNotContainsString('MACRO : templates/first.html.twig::item', $firstCode);
         $this->assertStringContainsString('MACRO : templates/second.html.twig::item', $secondCode);
+    }
+
+    public function testTemplateSpecificBlockExclusionDoesNotAffectOtherTemplates(): void
+    {
+        $excludedBlocks = ['templates/first.html.twig::title'];
+
+        $firstDecorator = new DebugLoaderDecorator(
+            $this->makeInnerLoader($this->getBaseTemplate(), 'templates/first.html.twig'),
+            true,
+            '',   // separatorMacroStart
+            '',   // separatorMacroEnd
+            '',   // separatorBlockStart
+            '',   // separatorBlockEnd
+            $excludedBlocks,
+            [],      // excludedMacros
+            [],      // excludedPaths
+        );
+
+        $secondDecorator = new DebugLoaderDecorator(
+            $this->makeInnerLoader($this->getBaseTemplate(), 'templates/second.html.twig'),
+            true,
+            '',   // separatorMacroStart
+            '',   // separatorMacroEnd
+            '',   // separatorBlockStart
+            '',   // separatorBlockEnd
+            $excludedBlocks,
+            [],      // excludedMacros
+            [],      // excludedPaths
+        );
+
+        $firstCode  = $firstDecorator->getSourceContext('templates/first.html.twig')->getCode();
+        $secondCode = $secondDecorator->getSourceContext('templates/second.html.twig')->getCode();
+
+        $this->assertStringNotContainsString('BLOCK : templates/first.html.twig::title', $firstCode);
+        $this->assertStringContainsString('BLOCK : templates/second.html.twig::title', $secondCode);
     }
 }

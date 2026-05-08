@@ -43,7 +43,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('excluded_blocks')
                     ->defaultValue(['title', 'meta', 'stylesheets', 'javascripts'])
-                    ->info('List of block names to exclude from wrapping')
+                    ->info('List of block names or exact template::block pairs to exclude from wrapping')
                 ->scalarPrototype()->end()
                 ->end()
                 ->arrayNode('excluded_macros')
