@@ -17,6 +17,7 @@ services:
       $separatorBlockStart: '%separator_block_start%'
       $separatorBlockEnd: '%separator_block_end%'
       $excludedBlocks: '%excluded_blocks%'
+      $excludedMacros: '%excluded_macros%'
       $excludedPaths: '%excluded_paths%'
 
   Francoisvaillant\TwigTrace\Twig\Extension\HtmlCommentExtension:

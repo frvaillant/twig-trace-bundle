@@ -25,7 +25,7 @@ A Symfony bundle that automatically adds HTML comments to your rendered template
 Install the bundle via Composer:
 
 ```bash
-composer require francoisvaillant/twig-trace
+composer require francoisvaillant/twig-trace-bundle
 ```
 
 If you're not using Symfony Flex, manually register the bundle in `config/bundles.php`:
@@ -82,13 +82,21 @@ twig_trace:
     separator_block_start: '{{{{{{'
     separator_block_end: '}}}}}}'
     
-    # Blocks to exclude from wrapping (useful for <title>, <meta>, etc.)
+    # Blocks to exclude from wrapping.
+    # Use a block name to exclude it everywhere, or template::block for one exact Twig template name.
     excluded_blocks:
         - title
         - meta
         - stylesheets
         - javascripts
-    
+        - '@Acme/base.html.twig::content'
+
+    # Macros to exclude from wrapping.
+    # Use a macro name to exclude it everywhere, or template::macro for one exact Twig template name.
+    excluded_macros:
+        - input
+        - '@Acme/base.html.twig::button'
+     
     # Template paths to exclude from tracing
     excluded_paths:
         - 'email/'           # Exclude email templates
@@ -106,7 +114,8 @@ twig_trace:
 | `separator_macro_end`      | `string` | `''` | Separator displayed at the end of comments for macros      |
 | `separator_block_start`    | `string` | `''` | Separator displayed at the start of comments for blocks    |
 | `separator_block_end`      | `string` | `''` | Separator displayed at the end of comments for blocks      |
-| `excluded_blocks`          | `array` | `['title', 'meta', 'stylesheets', 'javascripts']` | Block names to exclude from wrapping                       |
+| `excluded_blocks`          | `array` | `['title', 'meta', 'stylesheets', 'javascripts']` | Block names or exact `template::block` pairs to exclude from wrapping |
+| `excluded_macros`          | `array` | `[]` | Macro names or exact `template::macro` pairs to exclude from wrapping |
 | `excluded_paths`           | `array` | `[]` | Template paths to exclude (supports partial matches)       |
 
 **Note:** `@WebProfiler` templates are always excluded automatically.
@@ -183,8 +192,31 @@ twig_trace:
         - title
         - meta
         - head
+        - '@Acme/base.html.twig::content'
 ```
+
+- `title` excludes that block name everywhere.
+- `@Acme/base.html.twig::content` excludes only `content` in that exact Twig template name.
+
 Note that if you customize the excluded_blocks configuration, the default settings will not be applied anymore.  
+
+### Exclude Specific Macros
+
+Macros can be excluded globally by name or for one exact Twig template name:
+
+```yaml
+twig_trace:
+    excluded_macros:
+        - input
+        - '@Acme/base.html.twig::button'
+```
+
+- `input` excludes that macro name everywhere.
+- `@Acme/base.html.twig::button` excludes only `button` in that exact Twig template name.
+
+**Note:** Template-specific `template::block` and `template::macro` entries must match the exact template name Twig uses. For namespaced templates, use values like `@Acme/base.html.twig::content` and `@Acme/base.html.twig::button`.
+
+If you want to disable all tracing for one template file, use `excluded_paths` instead.
 
 ## Troubleshooting
 
@@ -196,7 +228,7 @@ Note that if you customize the excluded_blocks configuration, the default settin
 
 ### "A template that extends another one cannot include content outside Twig blocks"
 
-This error should not occur with TwigTrace. If you see it, please [open an issue](https://github.com/francoisvaillant/twig-trace/issues).
+This error should not occur with TwigTrace. If you see it, please [open an issue](https://github.com/francoisvaillant/twig-trace-bundle/issues).
 
 ## Contributing
 
@@ -214,6 +246,3 @@ Created by [François Vaillant](https://github.com/frvaillant)
 
 - 🐛 [Report a bug](https://github.com/frvaillant/twig-trace-bundle/issues)
 - 💡 [Request a feature](https://github.com/frvaillant/twig-trace-bundle/issues)
-
-## Todo
-- Add unit tests

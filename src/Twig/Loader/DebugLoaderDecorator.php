@@ -16,6 +16,7 @@ class DebugLoaderDecorator implements LoaderInterface
 
     /**
      * @param array<string> $excludedBlocks
+     * @param array<string> $excludedMacros
      * @param array<string> $excludedPaths
      */
     public function __construct(
@@ -26,6 +27,7 @@ class DebugLoaderDecorator implements LoaderInterface
         private readonly string $separatorBlockStart,
         private readonly string $separatorBlockEnd,
         private readonly array $excludedBlocks,
+        private readonly array $excludedMacros,
         private readonly array $excludedPaths,
     ) {
     }
@@ -92,6 +94,10 @@ class DebugLoaderDecorator implements LoaderInterface
             $macroParams  = $matches[2];
             $macroContent = $matches[3];
 
+            if ($this->shouldExcludeMacro($templateName, $macroName)) {
+                return $matches[0];
+            }
+
             return sprintf(
                 "{%% macro %s(%s) %%}\n\n<!-- %s MACRO : %s::%s %s -->\n%s\n<!-- %s END MACRO : %s::%s %s -->\n{%% endmacro %%}",
                 $macroName,
@@ -111,6 +117,16 @@ class DebugLoaderDecorator implements LoaderInterface
         return $result ?? $code;
     }
 
+    private function shouldExcludeMacro(string $templateName, string $macroName): bool
+    {
+        return $this->matchesScopedExclusion($this->excludedMacros, $templateName, $macroName);
+    }
+
+    private function shouldExcludeBlock(string $templateName, string $blockName): bool
+    {
+        return $this->matchesScopedExclusion($this->excludedBlocks, $templateName, $blockName);
+    }
+
     private function wrapBlocks(string $code, string $templateName): string
     {
         $pattern = '/{%\s*block\s+(\w+)\s*%}(.*?){%\s*endblock\s*%}/s';
@@ -119,7 +135,7 @@ class DebugLoaderDecorator implements LoaderInterface
             $blockName    = $matches[1];
             $blockContent = $matches[2];
 
-            if (in_array($blockName, $this->excludedBlocks, true)) {
+            if ($this->shouldExcludeBlock($templateName, $blockName)) {
                 return $matches[0];
             }
 
@@ -139,5 +155,14 @@ class DebugLoaderDecorator implements LoaderInterface
         }, $code);
 
         return $result ?? $code;
+    }
+
+    /**
+     * @param array<string> $excludedEntries
+     */
+    private function matchesScopedExclusion(array $excludedEntries, string $templateName, string $name): bool
+    {
+        return in_array($name, $excludedEntries, true)
+            || in_array(sprintf('%s::%s', $templateName, $name), $excludedEntries, true);
     }
 }

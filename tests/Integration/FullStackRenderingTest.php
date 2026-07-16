@@ -18,8 +18,10 @@ class FullStackRenderingTest extends TestCase
 {
     /**
      * @param array<string,string> $templates
+     * @param array<string>        $excludedMacros
+     * @param array<string>        $excludedBlocks
      */
-    private function createEnvironment(array $templates, bool $debug = true): Environment
+    private function createEnvironment(array $templates, bool $debug = true, array $excludedMacros = [], array $excludedBlocks = ['head']): Environment
     {
         $innerLoader = new ArrayLoader($templates);
 
@@ -30,7 +32,8 @@ class FullStackRenderingTest extends TestCase
             '>>>',   // separatorMacroEnd
             '<<<',   // separatorBlockStart
             '>>>',   // separatorBlockEnd
-            ['head'], // excludedBlocks
+            $excludedBlocks,
+            $excludedMacros,
             ['@WebProfiler'], // excludedPaths
         );
 
@@ -259,5 +262,86 @@ TWIG,
 
         // Verify rendered output
         $this->assertStringContainsString('<div class="alert-success">Operation completed!</div>', $html);
+    }
+
+    public function testExcludedImportedMacroStillRendersWithoutComments(): void
+    {
+        $templates = [
+            'macros_library.html.twig' => <<<'TWIG'
+{% macro alert(type, message) %}<div class="alert-{{ type }}">{{ message }}</div>{% endmacro %}
+{% macro icon(name) %}<i class="{{ name }}"></i>{% endmacro %}
+TWIG,
+            'page.html.twig' => <<<'TWIG'
+{% import 'macros_library.html.twig' as ui %}
+{% block content %}
+{{ ui.alert('success', 'Operation completed!') }}
+{{ ui.icon('fa-check') }}
+{% endblock %}
+TWIG,
+        ];
+
+        $env  = $this->createEnvironment($templates, true, ['macros_library.html.twig::alert']);
+        $html = $env->render('page.html.twig');
+
+        $this->assertStringNotContainsString('MACRO : macros_library.html.twig::alert', $html);
+        $this->assertStringContainsString('MACRO : macros_library.html.twig::icon', $html);
+        $this->assertStringContainsString('<div class="alert-success">Operation completed!</div>', $html);
+        $this->assertStringContainsString('<i class="fa-check"></i>', $html);
+    }
+
+    public function testGlobalMacroExclusionAppliesAcrossMultipleTemplates(): void
+    {
+        $templates = [
+            'form_macros.html.twig' => <<<'TWIG'
+{% macro input(name) %}<input name="{{ name }}">{% endmacro %}
+{% macro button(label) %}<button>{{ label }}</button>{% endmacro %}
+TWIG,
+            'filter_macros.html.twig' => <<<'TWIG'
+{% macro input(name) %}<label>{{ name }}</label>{% endmacro %}
+TWIG,
+            'page.html.twig' => <<<'TWIG'
+{% import 'form_macros.html.twig' as form %}
+{% import 'filter_macros.html.twig' as filters %}
+{% block content %}
+{{ form.input('email') }}
+{{ form.button('Save') }}
+{{ filters.input('status') }}
+{% endblock %}
+TWIG,
+        ];
+
+        $env  = $this->createEnvironment($templates, true, ['input']);
+        $html = $env->render('page.html.twig');
+
+        $this->assertStringNotContainsString('MACRO : form_macros.html.twig::input', $html);
+        $this->assertStringNotContainsString('MACRO : filter_macros.html.twig::input', $html);
+        $this->assertStringContainsString('MACRO : form_macros.html.twig::button', $html);
+        $this->assertStringContainsString('<input name="email">', $html);
+        $this->assertStringContainsString('<button>Save</button>', $html);
+        $this->assertStringContainsString('<label>status</label>', $html);
+    }
+
+    public function testTemplateSpecificBlockExclusionInInheritanceDoesNotAffectChildOverride(): void
+    {
+        $templates = [
+            'base.html.twig' => <<<'TWIG'
+{% block content %}Base content{% endblock %}
+TWIG,
+            'child.html.twig' => <<<'TWIG'
+{% extends 'base.html.twig' %}
+{% block content %}
+{{ parent() }}
+Child content
+{% endblock %}
+TWIG,
+        ];
+
+        $env  = $this->createEnvironment($templates, true, [], ['head', 'base.html.twig::content']);
+        $html = $env->render('child.html.twig');
+
+        $this->assertStringContainsString('BLOCK : child.html.twig::content', $html);
+        $this->assertStringNotContainsString('BLOCK : base.html.twig::content', $html);
+        $this->assertStringContainsString('Base content', $html);
+        $this->assertStringContainsString('Child content', $html);
     }
 }
